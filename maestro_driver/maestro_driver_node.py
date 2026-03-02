@@ -32,8 +32,8 @@ class MaestroDriverNode(Node):
         self.declare_parameter('ch2_channel', 1)
         self.declare_parameter('failsafe_timeout', 0.5)
         self.declare_parameter('failsafe_pwm', 1500)
-        self.declare_parameter('pwm_min', 1000)
-        self.declare_parameter('pwm_max', 2000)
+        self.declare_parameter('pwm_min', 1250)
+        self.declare_parameter('pwm_max', 1750)
 
         # Read parameters
         self.serial_port: str = self.get_parameter('serial_port').value

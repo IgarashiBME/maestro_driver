@@ -10,17 +10,17 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             'serial_port',
-            default_value='/dev/ttyACM0',
+            default_value='/dev/serial/by-id/usb-Pololu_Corporation_Pololu_Micro_Maestro_6-Servo_Controller_00297468-if00',
             description='Serial port for the Pololu Maestro controller',
         ),
         DeclareLaunchArgument(
             'ch1_channel',
-            default_value='0',
+            default_value='1',
             description='Maestro channel number for ch1',
         ),
         DeclareLaunchArgument(
             'ch2_channel',
-            default_value='1',
+            default_value='0',
             description='Maestro channel number for ch2',
         ),
         DeclareLaunchArgument(

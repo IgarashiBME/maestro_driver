@@ -29,7 +29,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'maestro_driver_node = maestro_driver.maestro_driver_node:main'
+            'maestro_driver_node = maestro_driver.maestro_driver_node:main',
+            'teleop_rc_pwm_node = maestro_driver.teleop_rc_pwm_node:main',
         ],
     },
 )
