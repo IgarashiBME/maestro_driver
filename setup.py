@@ -31,6 +31,7 @@ setup(
         'console_scripts': [
             'maestro_driver_node = maestro_driver.maestro_driver_node:main',
             'teleop_rc_pwm_node = maestro_driver.teleop_rc_pwm_node:main',
+            'teleop_diff_node = maestro_driver.teleop_diff_node:main',
         ],
     },
 )
