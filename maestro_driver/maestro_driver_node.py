@@ -30,6 +30,7 @@ class MaestroDriverNode(Node):
         self.declare_parameter('serial_port', '/dev/ttyACM0')
         self.declare_parameter('ch1_channel', 0)
         self.declare_parameter('ch2_channel', 1)
+        self.declare_parameter('ch3_channel', 2)
         self.declare_parameter('failsafe_timeout', 0.5)
         self.declare_parameter('failsafe_pwm', 1500)
         self.declare_parameter('pwm_min', 1250)
@@ -39,6 +40,7 @@ class MaestroDriverNode(Node):
         self.serial_port: str = self.get_parameter('serial_port').value
         self.ch1_channel: int = self.get_parameter('ch1_channel').value
         self.ch2_channel: int = self.get_parameter('ch2_channel').value
+        self.ch3_channel: int = self.get_parameter('ch3_channel').value
         self.failsafe_timeout: float = self.get_parameter('failsafe_timeout').value
         self.failsafe_pwm: int = self.get_parameter('failsafe_pwm').value
         self.pwm_min: int = self.get_parameter('pwm_min').value
@@ -69,7 +71,8 @@ class MaestroDriverNode(Node):
 
         self.get_logger().info(
             f'Maestro driver started (port={self.serial_port}, '
-            f'ch1={self.ch1_channel}, ch2={self.ch2_channel})'
+            f'ch1={self.ch1_channel}, ch2={self.ch2_channel}, '
+            f'ch3={self.ch3_channel})'
         )
 
     def _rc_pwm_callback(self, msg: UInt16MultiArray) -> None:
@@ -93,6 +96,10 @@ class MaestroDriverNode(Node):
 
         self._send_target(self.ch1_channel, ch1_pwm)
         self._send_target(self.ch2_channel, ch2_pwm)
+
+        if len(msg.data) >= 3:
+            ch3_pwm = self._clamp(int(msg.data[2]))
+            self._send_target(self.ch3_channel, ch3_pwm)
 
         self.last_msg_time = self.get_clock().now()
 
@@ -146,9 +153,10 @@ class MaestroDriverNode(Node):
             self._close_and_reconnect()
 
     def _send_failsafe(self) -> None:
-        """Send failsafe PWM value to both channels."""
+        """Send failsafe PWM value to all channels."""
         self._send_target(self.ch1_channel, self.failsafe_pwm)
         self._send_target(self.ch2_channel, self.failsafe_pwm)
+        self._send_target(self.ch3_channel, self.failsafe_pwm)
 
     def _connect_serial(self) -> None:
         """Attempt to open the serial port.
